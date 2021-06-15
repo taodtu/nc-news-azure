@@ -11,5 +11,5 @@ exports.articleData = require("./articles").map(article => {
   const { created_at, ...rest } = article;
   return { ...rest, created_at: new Date(article["created_at"]).toISOString() };
 });
-exports.topicData = require("./topics");
+exports.topicData = require("./topics").map(topic=>({spk:"topic", ...topic}));
 exports.userData = require("./users");
