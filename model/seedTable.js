@@ -1,12 +1,17 @@
-const {topicData} =require("../data/index");
-const {CosmosClient} = require("@azure/cosmos")
+const { topicData } = require("../data/index");
+const { DBclient } = require("../connection");
 
-exports.seedTable = async ()=> {
-
-    const client = new CosmosClient(process.env.DB_CONNECTION);
-    const database = client.database(process.env.DB_ID);
-    const container = database.container(process.env.CONTAINER_PRIMARY)
-    await Promise.all(topicData.map(topic=>container.items.create(topic)));
-    return 
-
-}
+exports.seedTable = async () => {
+  await DBclient.container.delete();
+  await DBclient.database.containers.create(
+    {
+      id: process.env.CONTAINER_PRIMARY,
+      partitionKey: process.env.PARTITION_KEY,
+    },
+    { offerThroughput: 400 }
+  );
+  await Promise.all(
+    topicData.map((topic) => DBclient.container.items.create(topic))
+  );
+  return;
+};
