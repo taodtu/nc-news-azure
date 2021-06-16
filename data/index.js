@@ -19,17 +19,20 @@ const articleData = article.map((article, index) => {
     created_at: new Date(article["created_at"]).toISOString(),
     article_id: index,
     votes: Math.floor(Math.random() * Math.floor(50)),
+    spk: `article_id#${index}`,
   };
 });
 
 exports.commentData = format(
   articleData,
-  comment.map((comment) => {
+  comment.map((comment, index) => {
     const { created_at, created_by, ...rest } = comment;
     return {
       ...rest,
       author: created_by,
       created_at: new Date(comment["created_at"]).toISOString(),
+      spk: `comment_id#${index}`,
+      comment_id: index,
     };
   }),
   "title",
@@ -37,5 +40,11 @@ exports.commentData = format(
   "belongs_to"
 );
 exports.articleData = articleData;
-exports.topicData = require("./topics");
-exports.userData = require("./users");
+exports.topicData = require("./topics").map((topic) => ({
+  spk: "topic",
+  ...topic,
+}));
+exports.userData = require("./users").map((user) => ({
+  spk: `user_id#${user.username}`,
+  ...user,
+}));
