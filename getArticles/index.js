@@ -1,10 +1,9 @@
+const { fetchAticles } = require("../model/fetchArticles");
 module.exports = async function (context, req) {
-  context.log("JavaScript HTTP trigger function processed a request.");
-
-  const name = req.query.topic;
+  const res = await fetchAticles(req.query);
 
   context.res = {
     // status: 200, /* Defaults to 200 */
-    body: name,
+    body: res,
   };
 };
