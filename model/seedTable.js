@@ -13,7 +13,7 @@ exports.seedTable = async () => {
       id: process.env.CONTAINER_PRIMARY,
       partitionKey: process.env.PARTITION_KEY,
     },
-    { offerThroughput: 400 }
+    { offerThroughput: 2000 }
   );
 
   const comment_count_chart = commentData.reduce((chart, comment) => {
@@ -24,10 +24,33 @@ exports.seedTable = async () => {
     comment_count: comment_count_chart[article.article_id],
     ...article,
   }));
-  const operations = topicData.map((topic) => ({
-    operationType: "Create",
-    resourceBody: topic,
-  }));
+
+  //seed topics, users and articles data
+  const operations = [...topicData, ...articleDataWithCount, ...userData].map(
+    (item) => ({
+      operationType: "Create",
+      resourceBody: item,
+    })
+  );
   await DBclient.container.items.bulk(operations);
+
+  //batchWriteItem can wirte max 100 request so this array is divided
+  const commentInput = commentData.reduce(
+    (a, comment, index) => {
+      a[Math.floor(index / 100)].push(comment);
+      return a;
+    },
+
+    [...Array(Math.ceil(commentData.length / 100))].map((e) => [])
+  );
+  await Promise.all(
+    commentInput.map((commetnArray) => {
+      const operations = commetnArray.map((item) => ({
+        operationType: "Create",
+        resourceBody: item,
+      }));
+      DBclient.container.items.bulk(operations);
+    })
+  );
   return;
 };

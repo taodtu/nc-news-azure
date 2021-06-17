@@ -19,7 +19,7 @@ const articleData = article.map((article, index) => {
     created_at: new Date(article["created_at"]).toISOString(),
     article_id: index,
     votes: Math.floor(Math.random() * Math.floor(50)),
-    spk: `article_id#${index}`,
+    spk: `${article.topic}#article_id#${index}`,
   };
 });
 
@@ -31,7 +31,7 @@ exports.commentData = format(
       ...rest,
       author: created_by,
       created_at: new Date(comment["created_at"]).toISOString(),
-      spk: `comment_id#${index}`,
+      spk: `${comment.created_by}#comment_id#${index}`,
       comment_id: index,
     };
   }),
