@@ -1,3 +1,4 @@
+const { fetchAticleByID } = require("../model/fetchArticleByID");
 module.exports = async function (context, req) {
   console.log(!req.query.article_id);
   if (!req.query.article_id) {
@@ -8,9 +9,20 @@ module.exports = async function (context, req) {
       },
     };
   } else {
-    context.res = {
-      // status: 200, /* Defaults to 200 */
-      body: req.query.article_id,
-    };
+    try {
+      const result = await fetchAticleByID(req.query.article_id);
+      context.res = {
+        // status: 200, /* Defaults to 200 */
+        body: result,
+      };
+    } catch (e) {
+      console.log(e);
+      context.res = {
+        status: 500,
+        body: JSON.stringify({
+          message: "get Articles fails",
+        }),
+      };
+    }
   }
 };
