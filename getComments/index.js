@@ -1,6 +1,7 @@
-const { fetchUser } = require("../model/fetchUser");
+const { fetchComments } = require("../model/fetchComments");
 module.exports = async function (context, req) {
-  if (!req.query.username) {
+  const { username, article_id } = req.query;
+  if (!(username || article_id)) {
     context.res = {
       status: 400,
       body: {
@@ -9,7 +10,7 @@ module.exports = async function (context, req) {
     };
   } else {
     try {
-      const result = await fetchUser(req.query.username);
+      const result = await fetchComments({ username, article_id }, req.query);
       context.res = {
         // status: 200, /* Defaults to 200 */
         body: result,
@@ -19,7 +20,7 @@ module.exports = async function (context, req) {
       context.res = {
         status: 500,
         body: JSON.stringify({
-          message: "get User fails",
+          message: "get comments fails",
         }),
       };
     }

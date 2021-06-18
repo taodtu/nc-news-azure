@@ -1,6 +1,5 @@
 const { fetchAticleByID } = require("../model/fetchArticleByID");
 module.exports = async function (context, req) {
-  console.log(!req.query.article_id);
   if (!req.query.article_id) {
     context.res = {
       status: 400,
