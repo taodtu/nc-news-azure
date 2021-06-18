@@ -1,7 +1,9 @@
 const { DBclient } = require("../connection");
 
 exports.updateArticleByID = async (article) => {
-  const { resource } = await DBclient.container.items.upsert(article);
+  const { resource } = await DBclient.container
+    .item(article.id, article.spk)
+    .replace(article);
   const {
     topic,
     title,
