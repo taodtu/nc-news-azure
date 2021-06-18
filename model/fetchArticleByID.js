@@ -27,6 +27,7 @@ exports.fetchAticleByID = async (spk) => {
       article_id,
       body,
       comment_count,
+      id,
     }) => ({
       topic,
       title,
@@ -36,6 +37,7 @@ exports.fetchAticleByID = async (spk) => {
       article_id,
       body,
       comment_count,
+      id,
     })
   );
 };

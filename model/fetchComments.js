@@ -27,13 +27,14 @@ exports.fetchComments = async (
   }
 
   return result.resources.map(
-    ({ author, created_at, votes, article_id, body, comment_id }) => ({
+    ({ author, created_at, votes, article_id, body, comment_id, id }) => ({
       author,
       created_at,
       votes,
       article_id,
       body,
       comment_id,
+      id,
     })
   );
 };

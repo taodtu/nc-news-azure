@@ -1,6 +1,6 @@
 const { updateArticleByID } = require("../model/updateArticleByID");
 module.exports = async function (context, req) {
-  if (!(req.query.article_id && req.body)) {
+  if (!req.body) {
     context.res = {
       status: 400,
       body: {
@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
     };
   } else {
     try {
-      const result = await updateArticleByID(req.query.article_id, req.body);
+      const result = await updateArticleByID(req.body);
       context.res = {
         status: 200,
         body: result,

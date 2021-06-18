@@ -41,6 +41,7 @@ exports.fetchAticles = async ({
       article_id,
       body,
       comment_count,
+      id,
     }) => ({
       topic,
       title,
@@ -50,6 +51,7 @@ exports.fetchAticles = async ({
       article_id,
       body,
       comment_count,
+      id,
     })
   );
 };
