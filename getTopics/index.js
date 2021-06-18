@@ -8,10 +8,10 @@ module.exports = async function (context) {
     };
   } catch (err) {
     console.log(err);
-    return {
-      statusCode: 500,
+    context.res = {
+      status: 500,
       body: JSON.stringify({
-        message: "get Articles fails",
+        message: "get Topics fails",
       }),
     };
   }

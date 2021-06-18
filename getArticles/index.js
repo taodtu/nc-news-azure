@@ -9,8 +9,8 @@ module.exports = async function (context, req) {
     };
   } catch (e) {
     console.log(e);
-    return {
-      statusCode: 500,
+    context.res = {
+      status: 500,
       body: JSON.stringify({
         message: "get Articles fails",
       }),
