@@ -7,6 +7,7 @@ const {
 const { DBclient } = require("../connection");
 
 exports.seedTable = async () => {
+  // seed the main container
   await DBclient.container.delete();
   await DBclient.database.containers.create(
     {
@@ -22,6 +23,7 @@ exports.seedTable = async () => {
   }, {});
   const articleDataWithCount = articleData.map((article) => ({
     comment_count: comment_count_chart[article.article_id],
+    spk: `article_id#${article.article_id}`,
     ...article,
   }));
 
@@ -45,11 +47,53 @@ exports.seedTable = async () => {
   );
   await Promise.all(
     commentInput.map((commetnArray) => {
-      const operations = commetnArray.map((item) => ({
+      const operations = commetnArray.map((comment) => ({
         operationType: "Create",
-        resourceBody: item,
+        resourceBody: comment,
       }));
       DBclient.container.items.bulk(operations);
+    })
+  );
+
+  //seed the 2nd container
+  await DBclient.container_2.delete();
+  await DBclient.database.containers.create(
+    {
+      id: process.env.CONTAINER_2,
+      partitionKey: process.env.PARTITION_KEY,
+    },
+    { offerThroughput: 2000 }
+  );
+  //seed the articles data with topics and users respectives as partition key
+  const operations_2 = articleDataWithCount.reduce((opt, article) => {
+    opt.push({
+      operationType: "Create",
+      resourceBody: {
+        ...article,
+        spk: `${article.topic}#topic_article#${article.article_id}`,
+      },
+    });
+    opt.push({
+      operationType: "Create",
+      resourceBody: {
+        ...article,
+        spk: `${article.author}#author_article#${article.article_id}`,
+      },
+    });
+    return opt;
+  }, []);
+  await DBclient.container_2.items.bulk(operations_2);
+  //seed the comment data with article_id spk
+  await Promise.all(
+    commentInput.map((commetnArray) => {
+      const operations = commetnArray.map((comment) => ({
+        operationType: "Create",
+        resourceBody: {
+          ...comment,
+          spk: `${comment.article_id}#comment_id#${comment.comment_id}`,
+        },
+      }));
+      DBclient.container_2.items.bulk(operations);
     })
   );
   return;
