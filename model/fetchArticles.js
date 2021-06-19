@@ -9,6 +9,7 @@ exports.fetchAticles = async ({
   p = 1,
 }) => {
   const offset = limit * (p - 1);
+  const spk = author ? `${author}#author_article#` : `${topic}#topic_article#`;
   const querySpec = {
     query: `SELECT * from c 
             WHERE STARTSWITH(c.spk, @spk)
@@ -17,7 +18,7 @@ exports.fetchAticles = async ({
     parameters: [
       {
         name: "@spk",
-        value: `${topic}#`,
+        value: spk,
       },
       {
         name: "@sort_by",
@@ -27,7 +28,7 @@ exports.fetchAticles = async ({
   };
 
   // read all items in the Items container
-  const { resources } = await DBclient.container.items
+  const { resources } = await DBclient.container_2.items
     .query(querySpec)
     .fetchAll();
 
