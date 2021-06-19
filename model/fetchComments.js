@@ -5,25 +5,26 @@ exports.fetchComments = async (
   { sort_by = "created_at", order = "desc" }
 ) => {
   let result;
-  // read all items in the Items container
+  const spk = username ? `${username}#comment_id` : `${article_id}#comment_id`;
+  const querySpec = {
+    query: `SELECT * from c 
+              WHERE STARTSWITH(c.spk, @spk)
+              ORDER BY c[@sort_by] ${order}`,
+    parameters: [
+      {
+        name: "@spk",
+        value: spk,
+      },
+      {
+        name: "@sort_by",
+        value: sort_by,
+      },
+    ],
+  };
   if (username) {
-    const querySpec = {
-      query: `SELECT * from c 
-                WHERE STARTSWITH(c.spk, @spk)
-                ORDER BY c[@sort_by] ${order}`,
-      parameters: [
-        {
-          name: "@spk",
-          value: `${username}#`,
-        },
-        {
-          name: "@sort_by",
-          value: sort_by,
-        },
-      ],
-    };
     result = await DBclient.container.items.query(querySpec).fetchAll();
   } else if (article_id) {
+    result = await DBclient.container_2.items.query(querySpec).fetchAll();
   }
 
   return result.resources.map(
