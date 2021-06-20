@@ -1,4 +1,4 @@
-const { updateArticleByID } = require("../model/updateArticleByID");
+const { updateArticle } = require("../model/updateArticle");
 module.exports = async function (context, req) {
   if (!req.body) {
     context.res = {
@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
     };
   } else {
     try {
-      const result = await updateArticleByID(req.body);
+      const result = await updateArticle(req.body);
       context.res = {
         status: 200,
         body: result,

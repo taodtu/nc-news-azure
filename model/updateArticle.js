@@ -1,13 +1,21 @@
 const { DBclient } = require("../connection");
 const { queryArticleC2 } = require("./queryArticleC2");
 
-exports.updateArticleByID = async (article) => {
+exports.updateArticle = async (article) => {
   //query the two article items in container_2 to update later
   const { article_topic, article_author } = await queryArticleC2(article);
 
   // update the two articles in container_2
-  const article_topic_update = { ...article_topic, votes: article.votes };
-  const article_author_update = { ...article_author, votes: article.votes };
+  const article_topic_update = {
+    ...article,
+    id: article_topic.id,
+    spk: article_topic.spk,
+  };
+  const article_author_update = {
+    ...article,
+    id: article_author.id,
+    spk: article_author.spk,
+  };
 
   //update the three article records together
   await Promise.all([

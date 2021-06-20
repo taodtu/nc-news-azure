@@ -3,16 +3,20 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.createComment = async (comment) => {
   const comment_id = uuidv4();
-  const created_at = new Date().toISOString();
-  const spk = `${comment.author}#comment_id#${comment_id}`;
   const newComment = {
     ...comment,
     votes: 0,
-    spk,
+    spk: `${comment.author}#comment_id#${comment_id}`,
     comment_id,
-    created_at,
+    created_at: new Date().toISOString(),
   };
-  const { resource } = await DBclient.container.items.create(newComment);
+  const [{ resource }, res] = await Promise.all([
+    DBclient.container.items.create(newComment),
+    DBclient.container_2.items.create({
+      ...newComment,
+      spk: `${comment.article_id}#comment_id#${comment_id}`,
+    }),
+  ]);
 
   return { ...newComment, id: resource.id };
 };
