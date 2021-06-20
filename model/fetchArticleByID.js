@@ -38,5 +38,6 @@ exports.fetchAticleByID = async (spk) => {
     body,
     comment_count,
     id,
+    spk,
   };
 };
