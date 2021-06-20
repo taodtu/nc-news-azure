@@ -1,5 +1,5 @@
 const { DBclient } = require("../connection");
-exports.QueryCommentC2 = async (comment) => {
+exports.queryCommentC2 = async (comment) => {
   const querySpecForComment_Article = {
     query: `SELECT * from c 
                 WHERE c.spk = @spk`,

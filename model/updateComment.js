@@ -1,9 +1,9 @@
 const { DBclient } = require("../connection");
-const { QueryCommentC2 } = require("./queryCommentC2");
+const { queryCommentC2 } = require("./queryCommentC2");
 
 exports.updateComment = async (comment) => {
   //query the comment in container_2 to update later
-  const result = await QueryCommentC2(comment);
+  const result = await queryCommentC2(comment);
   const comment_Article_update = { ...result, votes: comment.votes };
 
   await Promise.all([
