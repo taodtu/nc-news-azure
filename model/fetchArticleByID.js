@@ -17,27 +17,26 @@ exports.fetchAticleByID = async (spk) => {
     .query(querySpec)
     .fetchAll();
 
-  return resources.map(
-    ({
-      topic,
-      title,
-      author,
-      created_at,
-      votes,
-      article_id,
-      body,
-      comment_count,
-      id,
-    }) => ({
-      topic,
-      title,
-      author,
-      created_at,
-      votes,
-      article_id,
-      body,
-      comment_count,
-      id,
-    })
-  );
+  const {
+    topic,
+    title,
+    author,
+    created_at,
+    votes,
+    article_id,
+    body,
+    comment_count,
+    id,
+  } = resources[0];
+  return {
+    topic,
+    title,
+    author,
+    created_at,
+    votes,
+    article_id,
+    body,
+    comment_count,
+    id,
+  };
 };
