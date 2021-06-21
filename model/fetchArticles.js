@@ -4,12 +4,17 @@ exports.fetchAticles = async ({
   sort_by = "created_at",
   order = "desc",
   author,
-  topic = "coding",
-  limit = 12,
+  topic,
+  limit = 100,
   p = 1,
 }) => {
   const offset = limit * (p - 1);
-  const spk = author ? `${author}#author_article#` : `${topic}#topic_article#`;
+  let spk;
+  if (!author && !topic) {
+    spk = "article_id#";
+  } else {
+    spk = author ? `${author}#author_article#` : `${topic}#topic_article#`;
+  }
   const querySpec = {
     query: `SELECT * from c 
             WHERE STARTSWITH(c.spk, @spk)
@@ -28,9 +33,10 @@ exports.fetchAticles = async ({
   };
 
   // read all items in the Items container
-  const { resources } = await DBclient.container_2.items
-    .query(querySpec)
-    .fetchAll();
+  const { resources } =
+    spk === "article_id#"
+      ? await DBclient.container.items.query(querySpec).fetchAll()
+      : await DBclient.container_2.items.query(querySpec).fetchAll();
 
   return resources.map(
     ({
@@ -40,7 +46,6 @@ exports.fetchAticles = async ({
       created_at,
       votes,
       article_id,
-      body,
       comment_count,
       id,
     }) => ({
@@ -50,7 +55,6 @@ exports.fetchAticles = async ({
       created_at,
       votes,
       article_id,
-      body,
       comment_count,
       id,
     })
