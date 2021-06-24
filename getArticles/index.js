@@ -12,7 +12,7 @@ module.exports = async function (context, req) {
     context.res = {
       status: 500,
       body: JSON.stringify({
-        message: "get Comments fails",
+        message: "get articles fails",
       }),
     };
   }

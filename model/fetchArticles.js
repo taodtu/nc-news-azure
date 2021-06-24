@@ -8,7 +8,7 @@ exports.fetchAticles = async ({
   limit = 100,
   p = 1,
 }) => {
-  const offset = limit * (p - 1);
+  const offset = +limit * (+p - 1);
   let spk;
   if (!author && !topic) {
     spk = "article_id#";
@@ -18,8 +18,7 @@ exports.fetchAticles = async ({
   const querySpec = {
     query: `SELECT * from c 
             WHERE STARTSWITH(c.spk, @spk)
-            ORDER BY c[@sort_by] ${order}
-            OFFSET ${offset} LIMIT ${limit}`,
+            ORDER BY c[@sort_by] ${order}`,
     parameters: [
       {
         name: "@spk",
@@ -38,25 +37,30 @@ exports.fetchAticles = async ({
       ? await DBclient.container.items.query(querySpec).fetchAll()
       : await DBclient.container_2.items.query(querySpec).fetchAll();
 
-  return resources.map(
-    ({
-      topic,
-      title,
-      author,
-      created_at,
-      votes,
-      article_id,
-      comment_count,
-      id,
-    }) => ({
-      topic,
-      title,
-      author,
-      created_at,
-      votes,
-      article_id,
-      comment_count,
-      id,
-    })
-  );
+  return {
+    articles: resources
+      .slice(offset, offset + +limit)
+      .map(
+        ({
+          topic,
+          title,
+          author,
+          created_at,
+          votes,
+          article_id,
+          comment_count,
+          id,
+        }) => ({
+          topic,
+          title,
+          author,
+          created_at,
+          votes,
+          article_id,
+          comment_count,
+          id,
+        })
+      ),
+    total_count: resources.length,
+  };
 };
