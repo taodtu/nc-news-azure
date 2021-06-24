@@ -30,7 +30,7 @@ exports.commentData = format(
       ...rest,
       author: created_by,
       created_at: new Date(comment["created_at"]).toISOString(),
-      spk: `${comment.created_by}#comment_id#${index}`,
+      spk: `user#${comment.created_by}#comment_id#${index}`,
       comment_id: index,
     };
   }),

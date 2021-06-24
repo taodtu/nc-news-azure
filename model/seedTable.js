@@ -90,7 +90,7 @@ exports.seedTable = async () => {
         operationType: "Create",
         resourceBody: {
           ...comment,
-          spk: `${comment.article_id}#comment_id#${comment.comment_id}`,
+          spk: `article#${comment.article_id}#comment_id#${comment.comment_id}`,
         },
       }));
       DBclient.container_2.items.bulk(operations);

@@ -5,7 +5,9 @@ exports.fetchComments = async (
   { sort_by = "created_at", order = "desc" }
 ) => {
   let result;
-  const spk = username ? `${username}#comment_id` : `${article_id}#comment_id`;
+  const spk = username
+    ? `user#${username}#comment_id`
+    : `article#${article_id}#comment_id`;
   const querySpec = {
     query: `SELECT * from c 
               WHERE STARTSWITH(c.spk, @spk)
@@ -28,7 +30,7 @@ exports.fetchComments = async (
   }
 
   return result.resources.map(
-    ({ author, created_at, votes, article_id, body, comment_id, id }) => ({
+    ({ author, created_at, votes, article_id, body, comment_id, id, spk }) => ({
       author,
       created_at,
       votes,
@@ -36,6 +38,7 @@ exports.fetchComments = async (
       body,
       comment_id,
       id,
+      spk,
     })
   );
 };
