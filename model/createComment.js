@@ -8,7 +8,7 @@ exports.createComment = async (comment) => {
   const newComment = {
     ...comment,
     votes: 0,
-    spk: `${comment.author}#comment_id#${comment_id}`,
+    spk: `user#${comment.author}#comment_id#${comment_id}`,
     comment_id,
     created_at: new Date().toISOString(),
   };
@@ -16,7 +16,7 @@ exports.createComment = async (comment) => {
     DBclient.container.items.create(newComment),
     DBclient.container_2.items.create({
       ...newComment,
-      spk: `${comment.article_id}#comment_id#${comment_id}`,
+      spk: `article#${comment.article_id}#comment_id#${comment_id}`,
     }),
     fetchAticleByID(`article_id#${comment.article_id}`),
   ]);
