@@ -17,9 +17,11 @@ exports.fetchUser = async (spk) => {
     .query(querySpec)
     .fetchAll();
 
-  return resources.map(({ username, name, avatar_url }) => ({
+  const { username, name, avatar_url } = resources[0];
+
+  return {
     username,
     name,
     avatar_url,
-  }));
+  };
 };
