@@ -7,6 +7,7 @@ exports.createComment = async (comment) => {
   const comment_id = uuidv4();
   const newComment = {
     ...comment,
+    article_id: +comment.article_id,
     votes: 0,
     spk: `user#${comment.author}#comment_id#${comment_id}`,
     comment_id,
