@@ -6,7 +6,7 @@ exports.queryCommentC2 = async (comment) => {
     parameters: [
       {
         name: "@spk",
-        value: `${comment.article_id}#comment_id#${comment.comment_id}`,
+        value: `article#${comment.article_id}#comment_id#${comment.comment_id}`,
       },
     ],
   };
