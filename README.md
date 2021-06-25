@@ -13,7 +13,7 @@ Northcoders News is a social news aggregation, web content rating, and discussio
 - "GET /api/articles": "get all articles in this resource",
 - "PATCH /api/comments/:comment_id": "update the votes to a comment by its ID",
 - "DELETE /api/comments/:comment_id": "delete a comment by its ID"
-- 
+
 ![image](https://user-images.githubusercontent.com/37536658/123412488-8c010b00-d5a9-11eb-8717-78826d7b4806.png)
 
 
